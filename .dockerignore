@@ -1,0 +1,12 @@
+node_modules
+vendor
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+*.md
+.vscode
+.idea
+npm-debug.log
+yarn-error.log
