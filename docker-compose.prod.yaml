@@ -4,7 +4,7 @@ services:
     container_name: pos_app
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8081:80"
       - "6001:6001"
     env_file: .env
     environment:
