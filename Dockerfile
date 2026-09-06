@@ -31,17 +31,9 @@ COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 RUN rm -f /etc/nginx/http.d/default.conf.bak 2>/dev/null
 
 COPY docker/supervisor/supervisord.conf /etc/supervisord.conf
-COPY docker/entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
 
-RUN mkdir -p /var/log/supervisor /var/cache/nginx \
-    && mkdir -p /var/www/html/storage/framework/{sessions,views,cache} \
-    && mkdir -p /var/www/html/storage/logs \
-    && mkdir -p /var/www/html/storage/app/public \
-    && mkdir -p /var/www/html/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN mkdir -p /var/log/supervisor /var/cache/nginx
 
 EXPOSE 80 6001
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
