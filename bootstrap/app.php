@@ -13,9 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*');
+
         // Authenticated users visiting guest-only pages (e.g. /login) are sent
         // to their role-based home: staff to the cashier, admin to Filament.
-        $middleware->redirectUsersTo(fn () => auth()->user()?->getHomeUrl() ?? '/');
+        $middleware->redirectUsersTo(
+            fn () => auth()->user()?->getHomeUrl() ?? '/'
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

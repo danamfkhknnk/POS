@@ -4,6 +4,9 @@ RUN apk add --no-cache \
     libpng-dev libjpeg-turbo-dev freetype-dev \
     oniguruma-dev libxml2-dev zip unzip git nodejs npm
 
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd opcache
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
@@ -18,7 +21,7 @@ ENV VITE_REVERB_APP_KEY=$VITE_REVERB_APP_KEY \
     VITE_REVERB_SCHEME=$VITE_REVERB_SCHEME
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-autoloader --ignore-platform-reqs
 
 COPY . .
 RUN npm ci && npm run build
